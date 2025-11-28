@@ -1,0 +1,47 @@
+body {
+    background-color: #f5f7fb;
+}
+
+.navbar-brand {
+    font-weight: 600;
+    letter-spacing: 0.03em;
+}
+
+.card {
+    border-radius: 0.75rem;
+    box-shadow: 0 0.25rem 0.75rem rgba(15, 23, 42, 0.12);
+}
+
+.page-title {
+    margin-bottom: 1.5rem;
+}
+
+.table thead th {
+    background-color: #f8f9fa;
+}
+
+.badge-status {
+    font-size: 0.8rem;
+    padding: 0.4em 0.6em;
+    border-radius: 999px;
+}
+
+.badge-status-EN_ATTENTE {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.badge-status-VALIDEE {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.badge-status-REFUSEE {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.badge-status-ANNULEE {
+    background-color: #e2e3e5;
+    color: #383d41;
+}
