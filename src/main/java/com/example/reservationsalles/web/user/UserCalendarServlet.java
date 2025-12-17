@@ -88,7 +88,7 @@ public class UserCalendarServlet extends HttpServlet {
         }
 
         List<Integer> hours = new ArrayList<>();
-        for (int h = 8; h <= 18; h++) { // de 8h à 18h
+        for (int h = 0; h <= 23; h++) { // 0h à 23h
             hours.add(h);
         }
 

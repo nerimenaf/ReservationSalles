@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 
 import com.example.reservationsalles.config.DBConnection;
 import com.example.reservationsalles.dao.SalleDao;
@@ -102,5 +105,59 @@ public class SalleDaoImpl implements SalleDao {
             ps.setLong(1, id);
             ps.executeUpdate();
         }
+    }
+    @Override
+    public List<Salle> findAvailable(LocalDateTime debut, LocalDateTime fin,
+                                     Integer capaciteMin, String equipementsContains) throws Exception {
+        List<Salle> list = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder("SELECT * FROM salle s WHERE 1=1");
+        List<Object> params = new ArrayList<>();
+
+        if (capaciteMin != null) {
+            sql.append(" AND s.capacite >= ?");
+            params.add(capaciteMin);
+        }
+
+        if (equipementsContains != null && !equipementsContains.trim().isEmpty()) {
+            sql.append(" AND s.equipements LIKE ?");
+            params.add("%" + equipementsContains.trim() + "%");
+        }
+
+        // Exclure les salles qui ont déjà une réservation qui chevauche le créneau
+        sql.append(" AND s.id NOT IN (");
+        sql.append("   SELECT r.id_salle FROM reservation r");
+        sql.append("   WHERE r.statut IN ('EN_ATTENTE','VALIDEE')");
+        sql.append("     AND r.date_heure_debut < ?"); // fin
+        sql.append("     AND r.date_heure_fin   > ?"); // debut
+        sql.append(" )");
+
+        params.add(Timestamp.valueOf(fin));
+        params.add(Timestamp.valueOf(debut));
+
+        sql.append(" ORDER BY s.nom");
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            int idx = 1;
+            for (Object p : params) {
+                if (p instanceof Integer) {
+                    ps.setInt(idx++, (Integer) p);
+                } else if (p instanceof String) {
+                    ps.setString(idx++, (String) p);
+                } else if (p instanceof Timestamp) {
+                    ps.setTimestamp(idx++, (Timestamp) p);
+                }
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(map(rs));
+                }
+            }
+        }
+
+        return list;
     }
 }
