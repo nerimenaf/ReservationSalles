@@ -437,15 +437,21 @@
             </div>
             <div class="welcome-stats">
                 <div class="welcome-stat">
-                    <span class="welcome-stat-value">${totalSalles != null ? totalSalles : '0'}</span>
+                    <span class="welcome-stat-value">
+                        <c:out value="${totalSalles}" default="0"/>
+                    </span>
                     <span class="welcome-stat-label">Salles</span>
                 </div>
                 <div class="welcome-stat">
-                    <span class="welcome-stat-value">${totalUsers != null ? totalUsers : '0'}</span>
+                    <span class="welcome-stat-value">
+                        <c:out value="${totalUsers}" default="0"/>
+                    </span>
                     <span class="welcome-stat-label">Utilisateurs</span>
                 </div>
                 <div class="welcome-stat">
-                    <span class="welcome-stat-value">${pendingReservations != null ? pendingReservations : '0'}</span>
+                    <span class="welcome-stat-value">
+                        <c:out value="${pendingReservations}" default="0"/>
+                    </span>
                     <span class="welcome-stat-label">En attente</span>
                 </div>
             </div>

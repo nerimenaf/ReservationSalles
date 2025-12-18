@@ -584,17 +584,29 @@
                                 </span>
                             </td>
                             <td>
-                                <div class="actions-cell">
-                                    <c:if test="${r.statut != 'ANNULEE' && r.statut != 'REFUSEE'}">
-                                        <a href="${pageContext.request.contextPath}/user/reservations?action=cancel&id=${r.id}"
-                                           class="btn-action-sm btn-cancel"
-                                           onclick="return confirm('Êtes-vous sûr de vouloir annuler cette réservation ?');">
-                                            <i class="fas fa-times"></i>
-                                            Annuler
-                                        </a>
-                                    </c:if>
-                                </div>
-                            </td>
+    <div class="actions-cell">
+        <c:choose>
+            <c:when test="${r.dateHeureDebut lt now}">
+                <a href="${pageContext.request.contextPath}/user/salle?id=${r.idSalle}"
+                   class="btn-action-sm btn-view">
+                    <i class="fas fa-star"></i>
+                    Donner un avis
+                </a>
+            </c:when>
+
+            <c:otherwise>
+                <c:if test="${r.statut != 'ANNULEE' && r.statut != 'REFUSEE'}">
+                    <a href="${pageContext.request.contextPath}/user/reservations?action=cancel&id=${r.id}"
+                       class="btn-action-sm btn-cancel"
+                       onclick="return confirm('Êtes-vous sûr de vouloir annuler cette réservation ?');">
+                        <i class="fas fa-times"></i>
+                        Annuler
+                    </a>
+                </c:if>
+            </c:otherwise>
+        </c:choose>
+    </div>
+</td>
                         </tr>
                     </c:forEach>
                 </tbody>
