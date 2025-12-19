@@ -66,19 +66,23 @@ public class ReservationDaoImpl implements ReservationDao {
     @Override
     public List<Reservation> findByUtilisateur(Long idUtilisateur) throws Exception {
         List<Reservation> list = new ArrayList<>();
-        String sql = "SELECT r.*, s.nom AS salle_nom " +
+
+        String sql = "SELECT r.*, s.nom AS salle_nom, s.active AS salle_active " +
                      "FROM reservation r " +
                      "JOIN salle s ON r.id_salle = s.id " +
                      "WHERE r.id_utilisateur = ? " +
                      "ORDER BY r.date_heure_debut DESC";
+
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setLong(1, idUtilisateur);
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    Reservation r = mapBasic(rs);
+                    Reservation r = mapBasic(rs); // NE PAS lire salle_active ici
                     r.setSalleNom(rs.getString("salle_nom"));
+                    r.setSalleActive(rs.getBoolean("salle_active")); // ICI on lit l'alias
                     list.add(r);
                 }
             }

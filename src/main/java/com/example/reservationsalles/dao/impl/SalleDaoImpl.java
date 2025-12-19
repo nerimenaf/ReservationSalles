@@ -4,11 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-
+import java.util.ArrayList;
+import java.util.List;
 
 import com.example.reservationsalles.config.DBConnection;
 import com.example.reservationsalles.dao.SalleDao;
@@ -23,6 +22,13 @@ public class SalleDaoImpl implements SalleDao {
         s.setCapacite(rs.getInt("capacite"));
         s.setLocalisation(rs.getString("localisation"));
         s.setEquipements(rs.getString("equipements"));
+        // IMPORTANT : lire la colonne active
+        try {
+            s.setActive(rs.getBoolean("active"));
+        } catch (SQLException e) {
+            // si la colonne n'existe pas encore, on laisse true par défaut
+            s.setActive(true);
+        }
         return s;
     }
 
@@ -61,8 +67,8 @@ public class SalleDaoImpl implements SalleDao {
     public void save(Salle s) throws Exception {
         if (s.getId() == null) {
             // INSERT
-            String sql = "INSERT INTO salle (nom, capacite, localisation, equipements) "
-                       + "VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO salle (nom, capacite, localisation, equipements, active) "
+                       + "VALUES (?, ?, ?, ?, ?)";
             try (Connection conn = DBConnection.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
@@ -70,8 +76,11 @@ public class SalleDaoImpl implements SalleDao {
                 ps.setInt(2, s.getCapacite());
                 ps.setString(3, s.getLocalisation());
                 ps.setString(4, s.getEquipements());
+                ps.setBoolean(5, s.isActive());
 
-                ps.executeUpdate();
+                int rows = ps.executeUpdate();
+                System.out.println("INSERT salle, rows = " + rows);
+
                 try (ResultSet rs = ps.getGeneratedKeys()) {
                     if (rs.next()) {
                         s.setId(rs.getLong(1));
@@ -80,7 +89,7 @@ public class SalleDaoImpl implements SalleDao {
             }
         } else {
             // UPDATE
-            String sql = "UPDATE salle SET nom = ?, capacite = ?, localisation = ?, equipements = ? "
+            String sql = "UPDATE salle SET nom = ?, capacite = ?, localisation = ?, equipements = ?, active = ? "
                        + "WHERE id = ?";
             try (Connection conn = DBConnection.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -89,9 +98,11 @@ public class SalleDaoImpl implements SalleDao {
                 ps.setInt(2, s.getCapacite());
                 ps.setString(3, s.getLocalisation());
                 ps.setString(4, s.getEquipements());
-                ps.setLong(5, s.getId());
+                ps.setBoolean(5, s.isActive());
+                ps.setLong(6, s.getId());
 
-                ps.executeUpdate();
+                int rows = ps.executeUpdate();
+                System.out.println("UPDATE salle, rows = " + rows + " (id=" + s.getId() + ")");
             }
         }
     }
@@ -103,7 +114,8 @@ public class SalleDaoImpl implements SalleDao {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setLong(1, id);
-            ps.executeUpdate();
+            int rows = ps.executeUpdate();
+            System.out.println("DELETE salle, rows = " + rows + " (id=" + id + ")");
         }
     }
     @Override
@@ -131,6 +143,7 @@ public class SalleDaoImpl implements SalleDao {
         sql.append("     AND r.date_heure_debut < ?"); // fin
         sql.append("     AND r.date_heure_fin   > ?"); // debut
         sql.append(" )");
+        sql.append(" AND s.active = 1");
 
         params.add(Timestamp.valueOf(fin));
         params.add(Timestamp.valueOf(debut));
@@ -157,6 +170,7 @@ public class SalleDaoImpl implements SalleDao {
                 }
             }
         }
+        
 
         return list;
     }

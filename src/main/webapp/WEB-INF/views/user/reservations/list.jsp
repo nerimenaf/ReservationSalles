@@ -584,8 +584,21 @@
                                 </span>
                             </td>
                             <td>
+<td>
     <div class="actions-cell">
         <c:choose>
+            <c:when test="${r.salleActive != null and not r.salleActive}">
+                <span class="text-warning small d-block mb-1">
+                    Cette salle est actuellement suspendue (panne/travaux).
+                    Veuillez choisir une autre salle.
+                </span>
+                <a href="${pageContext.request.contextPath}/user/home"
+                   class="btn-action-sm btn-view">
+                    <i class="fas fa-door-open"></i>
+                    Choisir une autre salle
+                </a>
+            </c:when>
+
             <c:when test="${r.dateHeureDebut lt now}">
                 <a href="${pageContext.request.contextPath}/user/salle?id=${r.idSalle}"
                    class="btn-action-sm btn-view">

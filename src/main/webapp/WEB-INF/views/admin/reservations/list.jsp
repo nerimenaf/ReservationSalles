@@ -413,54 +413,64 @@
 
 <!-- ===== FILTER TABS ===== -->
 <div class="filter-tabs">
-    <button class="filter-tab active">
+    <!-- Toutes -->
+    <a class="filter-tab ${statusFilter == 'ALL' ? 'active' : ''}"
+       href="${pageContext.request.contextPath}/admin/reservations?status=ALL">
         <i class="fas fa-list"></i>
         Toutes
-        <span class="count">${reservations.size()}</span>
-    </button>
-    <button class="filter-tab">
+        <span class="count">${allCount}</span>
+    </a>
+
+    <!-- En attente -->
+    <a class="filter-tab ${statusFilter == 'EN_ATTENTE' ? 'active' : ''}"
+       href="${pageContext.request.contextPath}/admin/reservations?status=EN_ATTENTE">
         <i class="fas fa-hourglass-half"></i>
         En attente
-    </button>
-    <button class="filter-tab">
+        <span class="count">${pendingCount}</span>
+    </a>
+
+    <!-- Confirmées (VALIDEE en base) -->
+    <a class="filter-tab ${statusFilter == 'VALIDEE' ? 'active' : ''}"
+       href="${pageContext.request.contextPath}/admin/reservations?status=VALIDEE">
         <i class="fas fa-check-circle"></i>
         Confirmées
-    </button>
-    <button class="filter-tab">
+        <span class="count">${confirmedCount}</span>
+    </a>
+
+    <!-- Refusées -->
+    <a class="filter-tab ${statusFilter == 'REFUSEE' ? 'active' : ''}"
+       href="${pageContext.request.contextPath}/admin/reservations?status=REFUSEE">
         <i class="fas fa-times-circle"></i>
         Refusées
-    </button>
-    <button class="filter-tab">
+        <span class="count">${refusedCount}</span>
+    </a>
+
+    <!-- Annulées -->
+    <a class="filter-tab ${statusFilter == 'ANNULEE' ? 'active' : ''}"
+       href="${pageContext.request.contextPath}/admin/reservations?status=ANNULEE">
         <i class="fas fa-ban"></i>
         Annulées
-    </button>
+        <span class="count">${cancelledCount}</span>
+    </a>
 </div>
 
 <!-- ===== TABLE ===== -->
 <div class="table-card">
     <div class="table-header">
-        <h2>
-            <i class="fas fa-table"></i>
-            Liste des réservations
-        </h2>
-        <div class="search-box">
+    <h2>
+        <i class="fas fa-table"></i>
+        Liste des réservations
+    </h2>
+    <div class="search-box">
             <i class="fas fa-search"></i>
-            <input type="text" placeholder="Rechercher...">
+            <input type="text"
+                   id="searchSalleInput"
+                   placeholder="Rechercher par salle..."
+                   onkeyup="filterBySalle()" />
         </div>
-    </div>
-
-    <c:choose>
-        <c:when test="${empty reservations}">
-            <div class="empty-state">
-                <div class="empty-state-icon">
-                    <i class="fas fa-calendar-times"></i>
-                </div>
-                <h3>Aucune réservation</h3>
-                <p>Il n'y a pas encore de réservations dans le système.</p>
-            </div>
-        </c:when>
-        <c:otherwise>
-            <table class="admin-table">
+</div>
+ <div class="table-responsive">
+        <table id="adminReservationsTable" class="table table-hover mb-0 reservations-table">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -551,8 +561,34 @@
                     </c:forEach>
                 </tbody>
             </table>
-        </c:otherwise>
-    </c:choose>
+        </div>
+       
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById('searchSalleInput');
+    if (!input) return;
+
+    input.addEventListener('input', function() {
+        const filter = input.value.toLowerCase().trim();
+        // Toutes les lignes du tableau des réservations
+        const rows = document.querySelectorAll('.reservations-table tbody tr');
+
+        rows.forEach(function(row) {
+            // On suppose que la 2ème colonne est la colonne "Salle"
+            const salleCell = row.querySelector('td:nth-child(2)');
+            if (!salleCell) return;
+
+            const text = salleCell.textContent.toLowerCase();
+
+            if (filter === '' || text.includes(filter)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
 
 <jsp:include page="/WEB-INF/views/includes/footer.jsp" />

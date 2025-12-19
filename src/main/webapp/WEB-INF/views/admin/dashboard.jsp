@@ -545,9 +545,9 @@
     </a>
 </div>
 
-<!-- ===== ACTIVITY SECTION ===== -->
+
 <div class="activity-section">
-    <!-- Recent Reservations -->
+
     <div class="activity-card">
         <div class="activity-header">
             <h3>
@@ -589,50 +589,59 @@
         </ul>
     </div>
 
-    <!-- Quick Stats -->
-    <div class="quick-stats-card">
-        <div class="quick-stats-header">
-            <h3>
-                <i class="fas fa-chart-pie"></i>
-                Aperçu rapide
-            </h3>
+
+<div class="quick-stats-card">
+    <div class="quick-stats-header">
+        <h3>
+            <i class="fas fa-chart-pie"></i>
+            Aperçu rapide
+        </h3>
+    </div>
+    <div class="quick-stats-list">
+        <div class="quick-stat-item">
+            <span class="quick-stat-label">
+                <i class="fas fa-hourglass-half"></i>
+                En attente
+            </span>
+            <span class="quick-stat-value pending">
+                <c:out value="${pendingReservations}" default="0"/>
+            </span>
         </div>
-        <div class="quick-stats-list">
-            <div class="quick-stat-item">
-                <span class="quick-stat-label">
-                    <i class="fas fa-hourglass-half"></i>
-                    En attente
-                </span>
-                <span class="quick-stat-value pending">${pendingReservations != null ? pendingReservations : '0'}</span>
-            </div>
-            <div class="quick-stat-item">
-                <span class="quick-stat-label">
-                    <i class="fas fa-check-circle"></i>
-                    Confirmées
-                </span>
-                <span class="quick-stat-value success">${confirmedReservations != null ? confirmedReservations : '0'}</span>
-            </div>
-            <div class="quick-stat-item">
-                <span class="quick-stat-label">
-                    <i class="fas fa-door-open"></i>
-                    Salles actives
-                </span>
-                <span class="quick-stat-value">${totalSalles != null ? totalSalles : '0'}</span>
-            </div>
-            <div class="quick-stat-item">
-                <span class="quick-stat-label">
-                    <i class="fas fa-users"></i>
-                    Utilisateurs
-                </span>
-                <span class="quick-stat-value">${totalUsers != null ? totalUsers : '0'}</span>
-            </div>
-            <div class="quick-stat-item">
-                <span class="quick-stat-label">
-                    <i class="fas fa-star"></i>
-                    Avis
-                </span>
-                <span class="quick-stat-value">${totalAvis != null ? totalAvis : '0'}</span>
-            </div>
+        <div class="quick-stat-item">
+            <span class="quick-stat-label">
+                <i class="fas fa-check-circle"></i>
+                Confirmées
+            </span>
+            <span class="quick-stat-value success">
+                <c:out value="${confirmedReservations}" default="0"/>
+            </span>
+        </div>
+        <div class="quick-stat-item">
+            <span class="quick-stat-label">
+                <i class="fas fa-door-open"></i>
+                Salles actives
+            </span>
+            <span class="quick-stat-value">
+                <c:out value="${totalSalles}" default="0"/>
+            </span>
+        </div>
+        <div class="quick-stat-item">
+            <span class="quick-stat-label">
+                <i class="fas fa-users"></i>
+                Utilisateurs
+            </span>
+            <span class="quick-stat-value">
+                <c:out value="${totalUsers}" default="0"/>
+            </span>
+        </div>
+        <div class="quick-stat-item">
+            <span class="quick-stat-label">
+                <i class="fas fa-star"></i>
+                Avis
+            </span>
+            <span class="quick-stat-value">
+                <c:out value="${totalAvis}" default="0"/>
+            </span>
         </div>
     </div>
 </div>

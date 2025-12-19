@@ -92,11 +92,11 @@ public class AdminSalleServlet extends HttpServlet {
         String capaciteStr = request.getParameter("capacite");
         String localisation = request.getParameter("localisation");
         String equipements = request.getParameter("equipements");
+        String activeStr = request.getParameter("active"); // <<< CHECKBOX
 
         String error = null;
         int capacite = 0;
 
-        // petites validations
         if (nom == null || nom.trim().isEmpty()) {
             error = "Le nom est obligatoire";
         } else if (capaciteStr == null || capaciteStr.trim().isEmpty()) {
@@ -121,6 +121,9 @@ public class AdminSalleServlet extends HttpServlet {
         salle.setLocalisation(localisation);
         salle.setEquipements(equipements);
 
+        boolean active = (activeStr != null);   // checkbox => présent si cochée
+        salle.setActive(active);                // <<< CRUCIAL
+
         if (error != null) {
             request.setAttribute("error", error);
             request.setAttribute("salle", salle);
@@ -132,7 +135,6 @@ public class AdminSalleServlet extends HttpServlet {
         salleDao.save(salle);
         response.sendRedirect(request.getContextPath() + "/admin/salles");
     }
-
     private void deleteSalle(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
 

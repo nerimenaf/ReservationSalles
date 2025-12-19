@@ -53,8 +53,57 @@ public class AdminReservationServlet extends HttpServlet {
     private void listReservations(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
 
-        List<Reservation> reservations = reservationDao.findAll();
-        request.setAttribute("reservations", reservations);
+        // 1) Récupérer toutes les réservations (déjà triées par date si ton DAO le fait)
+        List<Reservation> allReservations = reservationDao.findAll();
+
+        // 2) Compter par statut
+        int allCount = allReservations.size();
+        int pendingCount = 0;
+        int confirmedCount = 0;
+        int refusedCount = 0;
+        int cancelledCount = 0;
+
+        for (Reservation r : allReservations) {
+            String statut = r.getStatut();
+            if ("EN_ATTENTE".equals(statut)) {
+                pendingCount++;
+            } else if ("VALIDEE".equals(statut)) { // statut en base = VALIDEE
+                confirmedCount++;
+            } else if ("REFUSEE".equals(statut)) {
+                refusedCount++;
+            } else if ("ANNULEE".equals(statut)) {
+                cancelledCount++;
+            }
+        }
+
+        // 3) Lire le filtre demandé
+        String statusFilter = request.getParameter("status");
+        if (statusFilter == null || statusFilter.isEmpty()) {
+            statusFilter = "ALL";
+        }
+
+        // 4) Filtrer la liste selon statusFilter
+        List<Reservation> filteredReservations = new java.util.ArrayList<>();
+        if ("ALL".equals(statusFilter)) {
+            filteredReservations = allReservations;
+        } else {
+            for (Reservation r : allReservations) {
+                if (statusFilter.equals(r.getStatut())) {
+                    filteredReservations.add(r);
+                }
+            }
+        }
+
+        // 5) Passer les données à la JSP
+        request.setAttribute("reservations", filteredReservations);
+        request.setAttribute("statusFilter", statusFilter);
+
+        request.setAttribute("allCount", allCount);
+        request.setAttribute("pendingCount", pendingCount);
+        request.setAttribute("confirmedCount", confirmedCount);
+        request.setAttribute("refusedCount", refusedCount);
+        request.setAttribute("cancelledCount", cancelledCount);
+
         request.getRequestDispatcher("/WEB-INF/views/admin/reservations/list.jsp")
                .forward(request, response);
     }

@@ -237,7 +237,7 @@
 
 <div class="form-page-container">
     <!-- Back Link -->
-    <a href="${pageContext.request.contextPath}/admin/salles" class="back-link">
+    <a href="${pageContext.request.contextPath}/admin/salles" class="post">
         <i class="fas fa-arrow-left"></i>
         Retour à la liste des salles
     </a>
@@ -325,8 +325,7 @@
                                required />
                     </div>
                 </div>
-
-                <div class="form-group">
+                                <div class="form-group">
                     <label for="equipements">
                         <i class="fas fa-tv"></i>
                         Équipements
@@ -340,6 +339,14 @@
                         Séparez les équipements par des virgules
                     </p>
                 </div>
+                <div class="form-check mb-3">
+    <input type="checkbox" class="form-check-input" id="active" name="active"
+           <c:if test="${salle.active}">checked</c:if> />
+    <label class="form-check-label" for="active">
+        Salle active (visible pour les utilisateurs)
+    </label>
+</div>
+                
 
                 <div class="form-actions">
                     <a href="${pageContext.request.contextPath}/admin/salles" class="btn-cancel">
@@ -353,6 +360,7 @@
                         </c:choose>
                     </button>
                 </div>
+                
             </form>
         </div>
     </div>

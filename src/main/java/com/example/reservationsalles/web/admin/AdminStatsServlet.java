@@ -30,9 +30,16 @@ public class AdminStatsServlet extends HttpServlet {
             Map<String, Long> statsByStatus = statsDao.countReservationsByStatus();
             List<SalleStats> topSalles = statsDao.topSalles(5);
 
+            long pending = statsByStatus.getOrDefault("EN_ATTENTE", 0L);
+            long confirmed = statsByStatus.getOrDefault("VALIDEE", 0L); // ATTENTION: statut = VALIDEE
+
             request.setAttribute("totalReservations", totalReservations);
             request.setAttribute("statsByStatus", statsByStatus);
             request.setAttribute("topSalles", topSalles);
+
+            // Ajout pour les cards "En attente" et "Confirmées"
+            request.setAttribute("pendingReservations", pending);
+            request.setAttribute("confirmedReservations", confirmed);
 
             request.getRequestDispatcher("/WEB-INF/views/admin/stats.jsp")
                    .forward(request, response);

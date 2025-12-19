@@ -6,11 +6,12 @@ public class Salle {
     private int capacite;
     private String localisation;
     private String equipements;
+    private boolean active; 
 
     public Salle() {
     }
 
-    public Salle(Long id, String nom, int capacite, String localisation, String equipements) {
+    public Salle(Long id, String nom, int capacite, String localisation, String equipements,boolean active) {
         this.id = id;
         this.nom = nom;
         this.capacite = capacite;
@@ -57,4 +58,12 @@ public class Salle {
     public void setEquipements(String equipements) {
         this.equipements = equipements;
     }
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 }

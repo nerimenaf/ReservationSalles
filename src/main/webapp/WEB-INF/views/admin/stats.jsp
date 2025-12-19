@@ -361,20 +361,14 @@
     </div>
 
     <div class="stat-card success">
-        <div class="stat-icon">
-            <i class="fas fa-check-circle"></i>
-        </div>
-        <div class="stat-value">
-            <c:set var="confirmedCount" value="0"/>
-            <c:forEach var="entry" items="${statsByStatus}">
-                <c:if test="${entry.key == 'CONFIRMEE'}">
-                    <c:set var="confirmedCount" value="${entry.value}"/>
-                </c:if>
-            </c:forEach>
-            ${confirmedCount}
-        </div>
-        <div class="stat-label">Confirmées</div>
+    <div class="stat-icon">
+        <i class="fas fa-check-circle"></i>
     </div>
+    <div class="stat-value">
+        <c:out value="${confirmedReservations}" default="0"/>
+    </div>
+    <div class="stat-label">Confirmées</div>
+</div>
 
     <div class="stat-card warning">
         <div class="stat-icon">

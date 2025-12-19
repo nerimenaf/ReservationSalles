@@ -546,84 +546,113 @@
 
     <!-- ===== RIGHT SIDE - LOGIN FORM ===== -->
     <div class="login-form-section">
-        <div class="form-header">
-            <h1>Bienvenue ! 👋</h1>
-            <p>Connectez-vous pour accéder à votre espace</p>
-        </div>
-
-        <!-- Error Alert -->
-        <c:if test="${not empty error}">
-            <div class="alert-error">
-                <i class="fas fa-exclamation-circle"></i>
-                <span>${error}</span>
-            </div>
-        </c:if>
-
-        <!-- Login Form -->
-        <form action="${pageContext.request.contextPath}/login" method="post">
-            <div class="form-group">
-                <label for="login">Identifiant</label>
-                <div class="input-wrapper">
-                    <input type="text" 
-                           class="form-control" 
-                           id="login" 
-                           name="login" 
-                           placeholder="Entrez votre identifiant"
-                           required 
-                           autofocus>
-                    <i class="fas fa-user"></i>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="motDePasse">Mot de passe</label>
-                <div class="input-wrapper">
-                    <input type="password" 
-                           class="form-control" 
-                           id="motDePasse" 
-                           name="motDePasse" 
-                           placeholder="Entrez votre mot de passe"
-                           required>
-                    <i class="fas fa-lock"></i>
-                </div>
-            </div>
-
-            <div class="form-options">
-                <label class="remember-me">
-                    <input type="checkbox" name="remember">
-                    <span>Se souvenir de moi</span>
-                </label>
-                <a href="#" class="forgot-password">Mot de passe oublié ?</a>
-            </div>
-
-            <button type="submit" class="btn-login">
-                Se connecter
-                <i class="fas fa-arrow-right"></i>
-            </button>
-        </form>
-
-        <!-- Social Login (Optional) -->
-        <div class="divider">
-            <span>ou continuer avec</span>
-        </div>
-
-        <div class="social-login">
-            <button type="button" class="btn-social google">
-                <i class="fab fa-google"></i>
-                Google
-            </button>
-            <button type="button" class="btn-social microsoft">
-                <i class="fab fa-microsoft"></i>
-                Microsoft
-            </button>
-        </div>
-
-        <!-- Footer -->
-        <p class="form-footer">
-            Pas encore de compte ? <a href="#">Contactez l'administrateur</a>
-        </p>
+    <div class="form-header">
+        <h1>Bienvenue ! 👋</h1>
+        <p>Connectez-vous pour accéder à votre espace</p>
     </div>
+
+    <!-- Notification Banner (Hidden by default) -->
+    <div id="notification-banner" class="notification-banner" style="display: none;">
+        <i class="fas fa-check-circle"></i>
+        <span>Un mail a été envoyé avec un nouveau mot de passe</span>
+        <button type="button" class="close-btn" onclick="closeBanner()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Error Alert -->
+    <c:if test="${not empty error}">
+        <div class="alert-error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>${error}</span>
+        </div>
+    </c:if>
+
+    <!-- Login Form -->
+    <form action="${pageContext.request.contextPath}/login" method="post">
+        <div class="form-group">
+            <label for="login">Identifiant</label>
+            <div class="input-wrapper">
+                <input type="text" 
+                       class="form-control" 
+                       id="login" 
+                       name="login" 
+                       placeholder="Entrez votre identifiant"
+                       required 
+                       autofocus>
+                <i class="fas fa-user"></i>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="motDePasse">Mot de passe</label>
+            <div class="input-wrapper">
+                <input type="password" 
+                       class="form-control" 
+                       id="motDePasse" 
+                       name="motDePasse" 
+                       placeholder="Entrez votre mot de passe"
+                       required>
+                <i class="fas fa-lock"></i>
+            </div>
+        </div>
+
+        <div class="form-options">
+            <label class="remember-me">
+                <input type="checkbox" name="remember">
+                <span>Se souvenir de moi</span>
+            </label>
+            <!-- ✅ Updated: Shows notification on click -->
+            <a href="#" class="forgot-password" onclick="showForgotPasswordBanner(event)">
+                Mot de passe oublié ?
+            </a>
+        </div>
+
+        <button type="submit" class="btn-login">
+            Se connecter
+            <i class="fas fa-arrow-right"></i>
+        </button>
+    </form>
+    <script>
+function showForgotPasswordBanner(event) {
+    event.preventDefault();
+    
+    const banner = document.getElementById('notification-banner');
+    banner.style.display = 'flex';
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+        closeBanner();
+    }, 5000);
+}
+
+function closeBanner() {
+    const banner = document.getElementById('notification-banner');
+    banner.style.opacity = '0';
+    banner.style.transform = 'translateY(-10px)';
+    
+    setTimeout(() => {
+        banner.style.display = 'none';
+        banner.style.opacity = '1';
+        banner.style.transform = 'translateY(0)';
+    }, 300);
+}
+</script>
+
+
+    
+
+    <!-- Footer -->
+    <p class="form-footer">
+        Pas encore de compte ? 
+        <!-- ✅ Updated: Links to LinkedIn -->
+        <a href="https://www.linkedin.com/in/nerimen-arfaoui-" target="_blank">
+            Contactez l'administrateur
+        </a>
+    </p>
 </div>
+
+       
 
 </body>
 </html>

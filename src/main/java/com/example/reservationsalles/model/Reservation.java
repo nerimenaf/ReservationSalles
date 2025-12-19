@@ -11,7 +11,8 @@ public class Reservation {
     private String statut;        // EN_ATTENTE, VALIDEE, REFUSEE, ANNULEE
     private String commentaire;
     private LocalDateTime dateCreation;
-
+    private Boolean salleActive;
+    
     // Pour l'affichage (jointure)
     private String salleNom;
     private String utilisateurLogin;
@@ -98,4 +99,12 @@ public class Reservation {
     public void setUtilisateurLogin(String utilisateurLogin) {
         this.utilisateurLogin = utilisateurLogin;
     }
+
+	public Boolean getSalleActive() {
+		return salleActive;
+	}
+
+	public void setSalleActive(Boolean salleActive) {
+		this.salleActive = salleActive;
+	}
 }
